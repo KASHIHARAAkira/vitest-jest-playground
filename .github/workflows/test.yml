@@ -1,0 +1,28 @@
+name: Vitest Test
+
+on:
+  push:
+    branches:
+      - dev-*
+
+jobs:
+  readily_test:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 5
+    env:
+      MARIADB_ROOT_PASSWORD: ${{secrets.MARIADB_ROOT_PASSWORD}}
+      MARIADB_USER: ${{secrets.MARIADB_USER}}
+      MARIADB_PASSWORD: ${{secrets.MARIADB_PASSWORD}}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Shutdown MariaDB
+        run: sudo service mysql stop
+
+      - name: Run docker-compose
+        shell: bash
+        run: |
+          touch .env
+          docker-compose -v
+          docker-compose up --build --abort-on-container-exit
+        working-directory: ./

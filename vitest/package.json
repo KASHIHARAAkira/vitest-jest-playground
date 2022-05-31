@@ -1,0 +1,20 @@
+{
+  "name": "vitest_playground",
+  "version": "1.0.0",
+  "description": "This hold the information to install necessary dependencies for Vitest and mariadb.",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "keywords": [
+    "vitest"
+  ],
+  "author": "Akira Kashihara",
+  "license": "MIT",
+  "devDependencies": {
+    "vitest": "^0.13.0"
+  },
+  "dependencies": {
+    "mariadb": "^3.0.0"
+  }
+}
