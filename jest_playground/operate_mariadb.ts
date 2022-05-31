@@ -11,13 +11,13 @@ export default class OperateMariadb {
     });
   }
   async checkCardName(value: string): Promise<boolean> {
-    let con: mariadb.PoolConnection;
     try {
-      con = await this.pool.getConnection();
+      const con = await this.pool.getConnection();
       const result = await con.query(
         "select * from cards where card_name = ?",
         [value]
       );
+      con.end();
       delete result.meta;
       const lengthObj = Object.keys(result).length;
       if (lengthObj > 0) {
@@ -29,8 +29,6 @@ export default class OperateMariadb {
       }
     } catch (err: any) {
       throw new Error(err);
-    } finally {
-      con.end();
     }
   }
 }
