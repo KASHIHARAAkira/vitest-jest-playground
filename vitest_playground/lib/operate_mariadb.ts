@@ -10,22 +10,42 @@ export default class OperateMariadb {
       database: process.env.MARIADB_DATABASE,
     });
   }
-  async checkCardName(value: string): Promise<boolean> {
+
+  async getConnection(): Promise<void> {
     try {
-      const con = await this.pool.getConnection();
-      const result = await con.query(
-        "select * from cards where card_name = ?",
-        [value]
-      );
-      con.end();
-      delete result.meta;
-      const lengthObj = Object.keys(result).length;
-      if (lengthObj > 0) {
-        return true;
-      } else if (lengthObj === 0) {
-        return false;
+      this.connection = await this.pool.getConnection();
+    } catch (err: any) {
+      throw new Error(err);
+    }
+  }
+
+  poolEnd() {
+    this.pool.end();
+  }
+
+  /**
+   *
+   * @param cardName
+   * @returns
+   */
+  async checkCardName(cardName: string): Promise<boolean> {
+    try {
+      if (this.connection) {
+        const result = await this.connection.query(
+          "select * from cards where card_name = ?",
+          [cardName]
+        );
+        delete result.meta;
+        const lengthObj = Object.keys(result).length;
+        if (lengthObj > 0) {
+          return true;
+        } else if (lengthObj === 0) {
+          return false;
+        } else {
+          throw new Error("Object length is invalid in checkCardName.");
+        }
       } else {
-        throw new Error("Object length is invalid in checkCardName.");
+        throw new Error("The database connection does not exist.");
       }
     } catch (err: any) {
       throw new Error(err);
