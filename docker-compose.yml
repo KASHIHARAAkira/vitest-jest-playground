@@ -31,25 +31,7 @@ services:
       - MARIADB_PASSWORD=${MARIADB_PASSWORD}
       - MARIADB_HOST=mariadb
     build:
-      context: ./vitest_playground/.
-      dockerfile: "Dockerfile"
-    depends_on:
-      mariadb:
-        condition: service_healthy
-    command: ["npm", "test"]
-    networks:
-      - datastream
-  jest:
-    env_file:
-      - .env
-    environment:
-      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
-      - MARIADB_DATABASE=Playground
-      - MARIADB_USER=${MARIADB_USER}
-      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
-      - MARIADB_HOST=mariadb
-    build:
-      context: ./jest_playground/.
+      context: ./vitest/.
       dockerfile: "Dockerfile"
     depends_on:
       mariadb:

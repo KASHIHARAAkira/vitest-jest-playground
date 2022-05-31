@@ -23,11 +23,6 @@ export default class OperateMariadb {
     this.pool.end();
   }
 
-  /**
-   *
-   * @param cardName
-   * @returns
-   */
   async checkCardName(cardName: string): Promise<boolean> {
     try {
       if (this.connection) {

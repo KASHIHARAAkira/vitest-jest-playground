@@ -14,7 +14,6 @@ describe("Error handling testing.", () => {
   it("this.pool.getConnection throws error.", async () => {
     const operateMariadb = new OperateMariadb();
 
-    vi.mock("operateMariadb");
     vi.spyOn(operateMariadb.pool, "getConnection").mockImplementation(
       async () => {
         throw new Error("Connection failed.");

@@ -24,17 +24,17 @@ describe("Error handling testing.", () => {
   it("con.query throws error", async () => {
     const operateMariadb = new OperateMariadb();
     await operateMariadb.getConnection();
+    if (operateMariadb.connection) {
+      vi.spyOn(operateMariadb.connection, "query").mockImplementation(() =>
+        Promise.reject(new Error("Query Error."))
+      );
 
-    vi.mock("operateMariadb"); //
-    vi.spyOn(operateMariadb.connection, "query").mockImplementation(() =>
-      Promise.reject(new Error("Query Error."))
-    );
+      expect(operateMariadb.checkCardName("king")).rejects.toThrow(
+        "Query Error."
+      );
 
-    expect(operateMariadb.checkCardName("king")).rejects.toThrow(
-      "Query Error."
-    );
-
-    operateMariadb.poolEnd();
+      operateMariadb.poolEnd();
+    }
   });
 
   it("this.connection is undefined.", () => {
