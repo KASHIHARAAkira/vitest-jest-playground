@@ -1,0 +1,61 @@
+version: '3'
+services:
+  mariadb:
+    image: mariadb:10.8
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=Playground
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+      - MARIADB_PORT=3306
+    tty: true
+    volumes:
+      - ./db-source:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+    networks:
+      - datastream
+    healthcheck:
+      test: ["CMD", "mariadb", "-u${MARIADB_USER}", "-p${MARIADB_PASSWORD}", "-e", "use Playground"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 10s
+  # vitest:
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+  #     - MARIADB_DATABASE=Playground
+  #     - MARIADB_USER=${MARIADB_USER}
+  #     - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+  #     - MARIADB_HOST=mariadb
+  #   build:
+  #     context: ./vitest_playground/.
+  #     dockerfile: "Dockerfile"
+  #   depends_on:
+  #     mariadb:
+  #       condition: service_healthy
+  #   command: ["npm", "test"]
+  #   networks:
+  #     - datastream
+  jest:
+    env_file:
+      - .env
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=Playground
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+      - MARIADB_HOST=mariadb
+    build:
+      context: ./jest_playground/.
+      dockerfile: "Dockerfile"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    command: ["npm", "test"]
+    networks:
+      - datastream
+networks:
+  datastream:
