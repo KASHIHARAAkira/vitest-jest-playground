@@ -4,7 +4,7 @@
   "description": "This hold the information to install necessary dependencies for Vitest and mariadb.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run"
   },
   "keywords": [
     "vitest"
