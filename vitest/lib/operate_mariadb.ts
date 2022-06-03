@@ -19,6 +19,19 @@ export default class OperateMariadb {
     }
   }
 
+  async disconnection(): Promise<boolean> {
+    if (this.connection) {
+      try {
+        await this.connection.end();
+        return true;
+      } catch (err: any) {
+        throw new Error(err);
+      }
+    } else {
+      throw new Error("The connection has not been established.");
+    }
+  }
+
   poolEnd() {
     this.pool.end();
   }

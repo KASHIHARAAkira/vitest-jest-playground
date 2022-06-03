@@ -6,6 +6,7 @@ describe("Interface testing.", async () => {
   await operateMariadb.getConnection();
 
   afterAll(() => {
+    operateMariadb.disconnection();
     operateMariadb.poolEnd();
   });
 
@@ -32,7 +33,7 @@ describe("Error handling testing.", () => {
       expect(operateMariadb.checkCardName("king")).rejects.toThrow(
         "Query Error."
       );
-
+      operateMariadb.disconnection();
       operateMariadb.poolEnd();
     }
   });
