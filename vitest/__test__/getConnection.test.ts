@@ -6,6 +6,7 @@ describe("Interface testing.", () => {
     const operateMariadb = new OperateMariadb();
     await operateMariadb.getConnection();
     expect(operateMariadb.connection).not.toBeUndefined();
+    await operateMariadb.disconnection();
     operateMariadb.poolEnd();
   });
 });
